@@ -1,2 +1,7 @@
+<<<<<<< HEAD
 E:\Documents\Computer Science\GameEngineDevelopment\OrgreTemplateV2\OrgreTemplateV2\x64\Debug\OrgreTemplateV2.exe
 E:\Documents\Computer Science\GameEngineDevelopment\OrgreTemplateV2\OrgreTemplateV2\x64\Debug\OrgreTemplateV2.pdb
+=======
+C:\Hooman\GBC\GAME3121\Course Materials\GameEngineDevelopment\OrgreTemplateV2\OrgreTemplateV2\x64\Debug\OrgreTemplateV2.exe
+C:\Hooman\GBC\GAME3121\Course Materials\GameEngineDevelopment\OrgreTemplateV2\OrgreTemplateV2\x64\Debug\OrgreTemplateV2.pdb
+>>>>>>> d4dce713d195648fbe8eb6eb4eee33fde730ecb8

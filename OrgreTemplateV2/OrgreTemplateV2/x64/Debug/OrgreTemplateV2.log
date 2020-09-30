@@ -394,3 +394,4 @@ E:\Documents\Computer Science\GameEngineDevelopment\ogre-sdk-v2.1\Components\Bit
 E:\Documents\Computer Science\GameEngineDevelopment\ogre-sdk-v2.1\Components\Bites\Include\OgreApplicationContextBase.h(294): message : see declaration of 'std::set<std::pair<uint32_t,OgreBites::InputListener *>,std::less<std::pair<uint32_t,OgreBites::InputListener *>>,std::allocator<std::pair<uint32_t,OgreBites::InputListener *>>>'
 E:\Documents\Computer Science\GameEngineDevelopment\OrgreTemplateV2\OrgreTemplateV2\Source.cpp(100,34): warning C4305: 'argument': truncation from 'double' to 'Ogre::Real'
   OrgreTemplateV2.vcxproj -> E:\Documents\Computer Science\GameEngineDevelopment\OrgreTemplateV2\OrgreTemplateV2\x64\Debug\OrgreTemplateV2.exe
+
