@@ -8,7 +8,7 @@ class Ball
 private:
     String ballShape = "ogrehead.mesh";
     Vector3 position = Vector3(0, 0, 0);
-    float xVelocity = -1;
+    float xVelocity = -5;
     float yVelocity = 0.2;
 
     Entity* mEntity;
@@ -22,7 +22,7 @@ public:
     String getShape() { return ballShape; }
     float getXVelocity() { return xVelocity; }
 
-    bool hitBottom();
+    void hitGoal();
     void reboundBat();
     void reboundSides();
     void update();

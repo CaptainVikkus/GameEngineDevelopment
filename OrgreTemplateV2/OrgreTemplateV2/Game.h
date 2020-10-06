@@ -1,8 +1,12 @@
 #pragma once
-#include "Ogre.h"
 #include "OgreApplicationContext.h"
 #include "OgreInput.h"
 #include "OgreRTShaderSystem.h"
+#include "OgreOverlay.h"
+#include "OgreOverlayManager.h"
+#include "OgreOverlayContainer.h"
+#include "OgreTextAreaOverlayElement.h"
+#include "OgreFontManager.h"
 #include "Ball.h"
 #include "Bat.h"
 

@@ -7,8 +7,8 @@ class Bat
 {
 private:
     String batShape = "cube.mesh";
-    float batSpeed = 5;
-    Vector3 position = Vector3(-600, 0, 0);
+    float batSpeed = 10;
+    Vector3 position = Vector3(-650, 0, 0);
 
     Entity* mEntity;
     SceneNode* mNode;
@@ -20,8 +20,8 @@ public:
     Vector3 getPosition() { return position; }
     String getShape() { return batShape; }
 
-    void MoveUp();
-    void MoveDown();
-    void Update();
+    void moveUp();
+    void moveDown();
+    void update();
 };
 

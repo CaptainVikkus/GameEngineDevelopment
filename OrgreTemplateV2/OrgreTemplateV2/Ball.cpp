@@ -8,17 +8,21 @@ Ball::Ball(SceneManager* scn)
 	mNode->setPosition(position);
 }
 
-bool Ball::hitBottom()
+void Ball::hitGoal()
 {
-	return false;
+	mNode->setPosition(Vector3(0, 0, 0));
+	position = mNode->getPosition();
+	xVelocity = -5;
 }
 
 void Ball::reboundBat()
 {
+	xVelocity *= -1; //reverse x speed
 }
 
 void Ball::reboundSides()
 {
+	yVelocity *= -1; //reverse y speed
 }
 
 void Ball::update()

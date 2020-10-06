@@ -1,4 +1,5 @@
 #include "Game.h"
+//#include <iostream>
 
 Game::Game()
     : ApplicationContext("OgreTemplate-V2")
@@ -15,6 +16,9 @@ void Game::setup()
     // get a pointer to the already created root
     mRoot = getRoot();
     mSceneManager = mRoot->createSceneManager();
+    // get a pointer to the already created window
+    mWindow = getRenderWindow();
+    mWindow->resize(windowWidth, windowHeight);
 
     // register our scene with the RTSS
     RTShader::ShaderGenerator* shadergen = RTShader::ShaderGenerator::getSingletonPtr();
@@ -34,43 +38,55 @@ void Game::setup()
     lightNode->setPosition(-80, 80, 50);
     //! [lightpos]
 
-    //! [camera]
+    // --- Camera ---- //
     SceneNode* camNode = mSceneManager->getRootSceneNode()->createChildSceneNode();
-
-    // create the camera
     Camera* cam = mSceneManager->createCamera("myCam");
     cam->setProjectionType(PT_ORTHOGRAPHIC);
     cam->setNearClipDistance(5); // specific to this sample
     cam->setAutoAspectRatio(true);
     camNode->attachObject(cam);
     camNode->setPosition(0, 0, 140);
-
-    // and tell it to render into the main window
-    mWindow = getRenderWindow();
-    mWindow->addViewport(cam);
-    mWindow->resize(windowWidth, windowHeight);
+    mWindow->addViewport(cam); // and tell it to render into the main window
     //! [camera]
-
-    //! [entity1]
-    //Entity* ogreEntity = mSceneManager->createEntity("ogrehead.mesh");
-    //SceneNode* ogreNode = mSceneManager->getRootSceneNode()->createChildSceneNode();
-    //ogreNode->attachObject(ogreEntity);
-    //! [entity1]
-
-    //! [entity4]
-    Entity* ogreEntity4 = mSceneManager->createEntity("cube.mesh");
-    SceneNode* ogreNode4 = mSceneManager->getRootSceneNode()->createChildSceneNode();
-    ogreNode4->setPosition(-600, 0, 0);
-    ogreNode4->setScale(0.5, 3, 0.5);
-    //ogreNode4->roll(Degree(-90));
-    ogreNode4->attachObject(ogreEntity4);
-    //! [entity4]
 
     // ---- Ball ---- //
     ball = new Ball(mSceneManager);
+    // ---- Paddle ---- //
+    bat = new Bat(mSceneManager);
 
+    //mSceneManager->addRenderQueueListener(mOverlaySystem);
+    // ---- Overlays ---- //
+    OverlayManager& overlayManager = OverlayManager::getSingleton();
 
-    // ---- !Ball ----//
+    // Create a panel
+    OverlayContainer* panel = static_cast<OverlayContainer*>(
+        overlayManager.createOverlayElement("Panel", "PanelName"));
+    //panel->setMetricsMode(Ogre::GMM_PIXELS);
+    panel->setPosition(10, 10);
+    panel->setDimensions(100, 100);
+    panel->setMaterialName("BaseWhite"); // Optional background material
+
+    // Create a text area
+    //TextAreaOverlayElement* textArea = static_cast<TextAreaOverlayElement*>(
+    //    overlayManager.createOverlayElement("TextArea", "TextAreaName"));
+    //textArea->setMetricsMode(Ogre::GMM_PIXELS);
+    //textArea->setPosition(0, 0);
+    //textArea->setDimensions(100, 100);
+    //textArea->setCaption("Hello, World!");
+    //textArea->setCharHeight(16);
+    ////textArea->setFontName("TrebuchetMSBold");
+    //textArea->setColourBottom(ColourValue(0.3, 0.5, 0.3));
+    //textArea->setColourTop(ColourValue(0.5, 0.7, 0.5));
+
+    // Create an overlay, and add the panel
+    Overlay* overlay = overlayManager.create("OverlayName");
+    overlay->add2D(panel);
+
+    // Add the text area to the panel
+    //panel->addChild(textArea);
+
+    // Show the overlay
+    overlay->show();
 }
 
 void Game::run()
@@ -80,9 +96,27 @@ void Game::run()
 
 bool Game::processEvents(const KeyboardEvent& evt)
 {
-    if (evt.keysym.sym == SDLK_ESCAPE)
+    switch (evt.keysym.sym)
     {
+    // Quit
+    case (SDLK_ESCAPE):
         getRoot()->queueEndRendering();
+        break;
+    // Move Bat
+    case (SDLK_DOWN):
+        //std::cout << bat->getPosition() << " against " << windowHeight * -1 << std::endl;
+        if (!(bat->getPosition().y - 250 <= windowHeight * -1))
+        {// Not hitting the bottom
+            bat->moveDown();
+        }
+        break;
+    case (SDLK_UP):
+        //std::cout << bat->getPosition() << " against " << windowHeight << std::endl;
+        if (!(bat->getPosition().y + 250 >= windowHeight))
+        {// Not hitting the top
+            bat->moveUp();
+        }
+        break;
     }
     return true;
 
@@ -90,7 +124,34 @@ bool Game::processEvents(const KeyboardEvent& evt)
 
 bool Game::update(const FrameEvent& frameEvent)
 {
+    // ---- Scoring ---- //
+    if (ball->getPosition().x + 20 > windowWidth) // scored goal
+    {
+        ball->hitGoal();
+        score++;
+    }
+    else if (ball->getPosition().x - 20 < -windowWidth) // lost goal
+    {
+        ball->hitGoal();
+        lives--;
+    }
+    // ---- Wall Collision ---- //
+    if (ball->getPosition().y > windowHeight || ball->getPosition().y < -windowHeight)
+    {
+        ball->reboundSides();
+    }
+    // ---- Paddle Collision ---- //
+    if (ball->getPosition().x - 20 < bat->getPosition().x + 20 && ball->getPosition().x + 20 > bat->getPosition().x - 20)
+    {
+        if (ball->getPosition().y - 20 < bat->getPosition().y + 150 && ball->getPosition().y + 20 > bat->getPosition().y - 150)
+        {
+            ball->reboundBat();
+        }
+    }
+    // ---- Move Entities ---- //
     ball->update();
+    bat->update();
+
     return true;
 }
 
