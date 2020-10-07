@@ -3,12 +3,12 @@
 #include "OgreInput.h"
 #include "OgreRTShaderSystem.h"
 #include "OgreOverlay.h"
-#include "OgreOverlayManager.h"
-#include "OgreOverlayContainer.h"
+#include "OgreTrays.h"
 #include "OgreTextAreaOverlayElement.h"
 #include "OgreFontManager.h"
 #include "Ball.h"
 #include "Bat.h"
+#include <string>
 
 using namespace Ogre;
 using namespace OgreBites;
@@ -20,6 +20,10 @@ class Game
 private:
     Ball* ball;
     Bat* bat;
+    Label* livesLabel;
+    Label* scoreLabel;
+    Label* fpsLabel;
+    Label* tickLabel;
     // mFont;
     // mIcon;
     // mMusic;
@@ -28,6 +32,7 @@ private:
     RenderWindow* mWindow;
     Root* mRoot;
     SceneManager* mSceneManager;
+    TrayManager* mTrayManager;
 
     int lives = 5;
     int score = 0;

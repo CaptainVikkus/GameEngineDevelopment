@@ -13,6 +13,7 @@ void Ball::hitGoal()
 	mNode->setPosition(Vector3(0, 0, 0));
 	position = mNode->getPosition();
 	xVelocity = -5;
+	yVelocity = rand() % 5 - 1;
 }
 
 void Ball::reboundBat()

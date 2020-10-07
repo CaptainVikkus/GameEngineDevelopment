@@ -1,5 +1,5 @@
 #include "Game.h"
-//#include <iostream>
+#include <iostream>
 
 Game::Game()
     : ApplicationContext("OgreTemplate-V2")
@@ -54,39 +54,14 @@ void Game::setup()
     // ---- Paddle ---- //
     bat = new Bat(mSceneManager);
 
-    //mSceneManager->addRenderQueueListener(mOverlaySystem);
-    // ---- Overlays ---- //
-    OverlayManager& overlayManager = OverlayManager::getSingleton();
+    // ---- HUD ---- //
+    mTrayManager = new TrayManager("HUD", mWindow);
+    mSceneManager->addRenderQueueListener(mOverlaySystem);
 
-    // Create a panel
-    OverlayContainer* panel = static_cast<OverlayContainer*>(
-        overlayManager.createOverlayElement("Panel", "PanelName"));
-    //panel->setMetricsMode(Ogre::GMM_PIXELS);
-    panel->setPosition(10, 10);
-    panel->setDimensions(100, 100);
-    panel->setMaterialName("BaseWhite"); // Optional background material
-
-    // Create a text area
-    //TextAreaOverlayElement* textArea = static_cast<TextAreaOverlayElement*>(
-    //    overlayManager.createOverlayElement("TextArea", "TextAreaName"));
-    //textArea->setMetricsMode(Ogre::GMM_PIXELS);
-    //textArea->setPosition(0, 0);
-    //textArea->setDimensions(100, 100);
-    //textArea->setCaption("Hello, World!");
-    //textArea->setCharHeight(16);
-    ////textArea->setFontName("TrebuchetMSBold");
-    //textArea->setColourBottom(ColourValue(0.3, 0.5, 0.3));
-    //textArea->setColourTop(ColourValue(0.5, 0.7, 0.5));
-
-    // Create an overlay, and add the panel
-    Overlay* overlay = overlayManager.create("OverlayName");
-    overlay->add2D(panel);
-
-    // Add the text area to the panel
-    //panel->addChild(textArea);
-
-    // Show the overlay
-    overlay->show();
+    livesLabel = mTrayManager->createLabel(TL_TOP, "Lives", "Lives: " + std::to_string(lives), 200);
+    scoreLabel = mTrayManager->createLabel(TL_TOPRIGHT, "Score", "Score: " + std::to_string(score), 150);
+    fpsLabel = mTrayManager->createLabel(TL_BOTTOMRIGHT, "fps", String("fps"), 150);
+    tickLabel = mTrayManager->createLabel(TL_BOTTOMRIGHT, "tick", String("tick"), 150);
 }
 
 void Game::run()
@@ -136,7 +111,7 @@ bool Game::update(const FrameEvent& frameEvent)
         lives--;
     }
     // ---- Wall Collision ---- //
-    if (ball->getPosition().y > windowHeight || ball->getPosition().y < -windowHeight)
+    if (ball->getPosition().y + 100 > windowHeight || ball->getPosition().y - 100 < -windowHeight)
     {
         ball->reboundSides();
     }
@@ -150,7 +125,15 @@ bool Game::update(const FrameEvent& frameEvent)
     }
     // ---- Move Entities ---- //
     ball->update();
-    bat->update();
+    //bat->update(); //empty function
+
+    // ---- Labels ---- //
+    livesLabel->setCaption("Lives: " + std::to_string(lives));
+    scoreLabel->setCaption("Score: " + std::to_string(score));
+    fpsLabel->setCaption(std::to_string((int)(1 / frameEvent.timeSinceLastFrame)));
+    tickLabel->setCaption(std::to_string(frameEvent.timeSinceLastFrame));
+
+    mTrayManager->adjustTrays();
 
     return true;
 }
