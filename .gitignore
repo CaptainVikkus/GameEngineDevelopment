@@ -15,3 +15,8 @@ Doodle/sfml-window-2.dll
 Doodle/sfml-window-d-2.dll
 DoodleAssignment2.zip
 GAME3121_LabAssigment2.pdf
+*.pdb
+*.idb
+OrgreTemplateV2\OrgreTemplateV2\Debug\
+OrgreTemplateV2/OrgreTemplateV2/x64/Debug/vc142.pdb
+*.obj
